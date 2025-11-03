@@ -39,7 +39,6 @@ Este repositório contém o trabalho final da disciplina de **Segurança da Info
 
 ## Como Usar (Parte Prática)
 ### Demonstração de Ataques
-Execute em sequência da VM Atacante. Documente com screenshots/logs (salve em `docs/pratica/`). Grave vídeos para apresentação.
 
 1. **Ataque SSH (Brute-Force):**
 - Comando: `hydra -l root -P wordlist.txt ssh://192.168.56.10` (wordlist com "weakpass").
@@ -69,7 +68,6 @@ Execute em sequência da VM Atacante. Documente com screenshots/logs (salve em `
 ### Aplicação de Hardening
 Após ataques, mitigue na Vítima:
 - Repita ataques: Devem falhar (ex.: SSH bloqueado, permissões revogadas).
-- Documente: Logs antes/depois em `docs/pratica/`.
 
 ## Parte Teórica
 - Leia o relatório em relatoriofinal.pdf`.
