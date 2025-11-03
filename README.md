@@ -25,7 +25,7 @@ Este repositório contém o trabalho final da disciplina de **Segurança da Info
 1. **Baixe e Instale VirtualBox:** [virtualbox.org](https://www.virtualbox.org/).
 2. **Crie VMs:**
    - Duas VMs: "Vitima" e "Atacante" (2GB RAM, 20GB HD cada).
-   - Monte o ISO do Ubuntu e instale.
+   - Monte o ISO do Linux e instale.
 3. **Configure Rede Isolada:**
    - Em VirtualBox: Settings > Network > Internal Network > Name: "labnet".
    - Atribua IPs: Vítima (192.168.56.10), Atacante (192.168.56.20).
