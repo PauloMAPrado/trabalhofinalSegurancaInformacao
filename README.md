@@ -48,11 +48,11 @@ Execute em sequência da VM Atacante. Documente com screenshots/logs (salve em `
 
 2. **Redes Não Segmentadas:**
 - Comando: `nmap -sP 192.168.56.0/24`.
-- Código: `./scripts/ataques/scan_network.sh`.
+- Código: `./scripts/scan_network.sh`.
 
 3. **Permissões Excessivas:**
 - Após SSH: `sudo su` (sem senha).
-- Código: `./scripts/ataques/escalate_priv.sh`.
+- Código: `./scripts/escalate_priv.sh`.
 
 4. **Falta de Rastreabilidade:**
 - Use conta compartilhada: `ssh victimuser@192.168.56.10`.
