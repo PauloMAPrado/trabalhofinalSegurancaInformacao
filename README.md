@@ -47,13 +47,18 @@ Execute em sequência da VM Atacante. Documente com screenshots/logs (salve em `
 - Demonstre: Conecte via SSH e manipule arquivos.
 
 2. **Redes Não Segmentadas:**
-- Comando: `nmap -sP 192.168.56.0/24`.
-- Código: `./scripts/ataques/scan_network.sh`.
+- Comando: `nmap -sP 192.168.56.0/24`. 
+- Comando: `arp - a`(lista dispositivos na rede local. 
+- Saída: 192.168.56.10 (vítima)
 
 3. **Permissões Excessivas:**
-- Após SSH: `sudo su` (sem senha).
-- Código: `./scripts/ataques/escalate_priv.sh`.
-
+- Comando: `ssh victimuser@192.168.56.10`  # Senha: weakpass
+- Comando:  `sudo su`  # Vai para root sem senha extra
+- Comando: whoami  # Deve retornar "root"
+- Comando: `echo "malware"` > /root/file.txt  # Manipula
+exit  # Sai.
+- Demonstração: Mostre root access e arquivo criado.
+- 
 4. **Falta de Rastreabilidade:**
 - Use conta compartilhada: `ssh victimuser@192.168.56.10`.
 - Código: `./scripts/ataques/shared_account.sh`.
