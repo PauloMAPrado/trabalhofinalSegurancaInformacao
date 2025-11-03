@@ -43,28 +43,27 @@ Execute em sequência da VM Atacante. Documente com screenshots/logs (salve em `
 
 1. **Ataque SSH (Brute-Force):**
 - Comando: `hydra -l root -P wordlist.txt ssh://192.168.56.10` (wordlist com "weakpass").
-- Código: `python3 scripts/ataques/ssh_brute.py`.
+- Código: `python3 scripts/ssh_brute.py`.
 - Demonstre: Conecte via SSH e manipule arquivos.
 
 2. **Redes Não Segmentadas:**
-- Comando: `nmap -sP 192.168.56.0/24`. 
-- Comando: `arp - a`(lista dispositivos na rede local. 
-- Saída: 192.168.56.10 (vítima)
+- Comando: `nmap -sP 192.168.56.0/24`.
+- Código: `./scripts/ataques/scan_network.sh`.
 
 3. **Permissões Excessivas:**
-- Comando: `ssh victimuser@192.168.56.10`  # Senha: weakpass
-- Comando:  `sudo su`  # Vai para root sem senha extra
+- Após SSH: `sudo su` (sem senha).
+- Código: `./scripts/ataques/escalate_priv.sh`.
 
 4. **Falta de Rastreabilidade:**
 - Use conta compartilhada: `ssh victimuser@192.168.56.10`.
-- Código: `./scripts/ataques/shared_account.sh`.
+- Código: `./scripts/shared_account.sh`.
 
 5. **Pontos Expostos:**
 - Simule USB: Monte dispositivo e copie dados.
-- Código: `./scripts/ataques/exposed_ports.sh`.
+- Código: `./scripts/exposed_ports.sh`.
 
 6. **Engenharia Social (Pretexting):**
-- Código: `python3 scripts/ataques/pretexting_sim.py`.
+- Código: `python3 scripts/pretexting_sim.py`.
 
 
 ### Aplicação de Hardening
