@@ -16,7 +16,7 @@ Este repositório contém o trabalho final da disciplina de **Segurança da Info
 
 ## Pré-Requisitos
 - **Software:** VirtualBox ou VMware (gratuito).
-- **Sistema Operacional:** Ubuntu 22.04 ISO (baixe de (https://www.linuxvmimages.com/images/ubuntu-2404/).
+- **Sistema Operacional:** Ubuntu 22.04 ISO (baixe de (https://ubuntu.com/download/desktop).
 - **Hardware:** PC com 8GB RAM mínimo, 40GB espaço em disco.
 - **Conhecimentos:** Básicos de Linux, redes e segurança (SSH, firewalls).
 - **Rede:** Configure VMs em Internal Network (isolada) para simular laboratório.
