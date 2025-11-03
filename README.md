@@ -54,11 +54,7 @@ Execute em sequência da VM Atacante. Documente com screenshots/logs (salve em `
 3. **Permissões Excessivas:**
 - Comando: `ssh victimuser@192.168.56.10`  # Senha: weakpass
 - Comando:  `sudo su`  # Vai para root sem senha extra
-- Comando: whoami  # Deve retornar "root"
-- Comando: `echo "malware"` > /root/file.txt  # Manipula
-exit  # Sai.
-- Demonstração: Mostre root access e arquivo criado.
-- 
+
 4. **Falta de Rastreabilidade:**
 - Use conta compartilhada: `ssh victimuser@192.168.56.10`.
 - Código: `./scripts/ataques/shared_account.sh`.
