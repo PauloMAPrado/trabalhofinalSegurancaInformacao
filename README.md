@@ -72,5 +72,5 @@ Após ataques, mitigue na Vítima:
 - Documente: Logs antes/depois em `docs/pratica/`.
 
 ## Parte Teórica
-- Leia o relatório em `docs/relatorio_teorico.pdf`.
+- Leia o relatório em relatoriofinal.pdf`.
 - Inclui análise de vulnerabilidades, forense (cadeia de custódia, logs), impactos e propostas (PUA, treinamentos).
