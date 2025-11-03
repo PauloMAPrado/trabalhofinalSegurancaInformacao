@@ -10,13 +10,13 @@ Este repositório contém o trabalho final da disciplina de **Segurança da Info
 - Promover cultura de segurança ética e responsável.
 
 
-**Ferramentas:** VMs (Ubuntu 22.04), VirtualBox, Nmap, Hydra, Wireshark, Python/Bash scripts.  
+**Ferramentas:** VMs (Linux), VirtualBox, Nmap, Hydra, Wireshark, Python/Bash scripts.  
 **Aviso Importante:** Este projeto é para fins educacionais. Todas as simulações ocorrem em ambientes isolados (VMs sem internet). Não use em sistemas reais para evitar violações legais.
 
 
 ## Pré-Requisitos
 - **Software:** VirtualBox ou VMware (gratuito).
-- **Sistema Operacional:** Ubuntu 22.04 ISO (baixe de (https://ubuntu.com/download/desktop).
+- **Sistema Operacional:** https://linuxmint.com/download.php.
 - **Hardware:** PC com 8GB RAM mínimo, 40GB espaço em disco.
 - **Conhecimentos:** Básicos de Linux, redes e segurança (SSH, firewalls).
 - **Rede:** Configure VMs em Internal Network (isolada) para simular laboratório.
