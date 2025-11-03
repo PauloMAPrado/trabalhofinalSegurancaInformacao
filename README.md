@@ -25,13 +25,17 @@ Este repositório contém o trabalho final da disciplina de **Segurança da Info
 1. **Baixe e Instale VirtualBox:** [virtualbox.org](https://www.virtualbox.org/).
 2. **Crie VMs:**
    - Duas VMs: "Vitima" e "Atacante" (2GB RAM, 20GB HD cada).
-   - Monte o ISO do Ubuntu e instale (usuário: "user", senha: "pass123").
+   - Monte o ISO do Ubuntu e instale.
 3. **Configure Rede Isolada:**
    - Em VirtualBox: Settings > Network > Internal Network > Name: "labnet".
    - Atribua IPs: Vítima (192.168.56.10), Atacante (192.168.56.20).
 4. **Clone o Repositório:**
-5.  **Execute Setup Inicial na Vítima:**
-- Isso instala SSH, configura vulnerabilidades simuladas (senhas fracas, permissões excessivas).
+   - git clone
+   - cd trabalhofinalSegurancaInformacao
+6.  **Execute Setup Inicial na Vítima:**
+   - chmod +x scripts/setup_vms.sh
+   - ./scripts/setup_vms.sh
+   - Isso instala SSH, configura vulnerabilidades simuladas (senhas fracas, permissões excessivas).
 
 ## Como Usar (Parte Prática)
 ### Demonstração de Ataques
