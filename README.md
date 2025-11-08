@@ -67,35 +67,102 @@ Esta seção é o núcleo da parte prática, demonstrando cada vulnerabilidade e
 ### Demonstração de Ataques
 
 ### Cenário 1: Acesso SSH via Senha Fraca (Cenário Base)
-* **Descrição:** [A ser preenchido pela aluno responsável]
+* **Descrição:** O serviço SSH tem acesso fácil quando as maquinas compartilham o mesmo usuário e senha
 
 #### 1.A - Ataque
-[A ser preenchido pela aluno responsável]
+
+```
+# Instale o nmap se não tiver
+sudo apt install nmap
+
+# Faça um scan de "descoberta" na sua rede substituindo '192.168.1.0/24' pela sua faixa de IP.
+nmap -sn 192.168.1.0/24 
+
+# Scan de portas no alvo
+nmap -sV 192.168.1.10
+
+# Tente o login SSH
+ssh professor@192.168.1.10 
+
+# Usando a senha de acesso, você comanda a máquina remotamente
+```
 
 #### 1.B - Hardening
-[A ser preenchido pela aluno responsável]
+> A configuração do usuário SSH precisa ser bem protegida para que não haja problemas na rede.
+> Por padrão, SSH não deveria aceitar a senha do computador como senha pra acesso remoto.
+> Um simples 'PasswordAuthentication no' no arquivo sshd_config do SSH desabilita essa função
 
 ---
 
 ### Cenário 2: Redes Não Segmentadas
-* **Descrição:** [A ser preenchido pela aluno responsável]
+* **Descrição:** O salão de festas
 
 #### 2.A - Ataque
-[A ser preenchido pela aluno responsável]
+```
+# Instale o nmap se não tiver
+sudo apt install nmap
+
+# Faça um scan de "descoberta" na sua rede substituindo '192.168.1.0/24' pela sua faixa de IP.
+nmap -sn 192.168.1.0/24 
+
+# Scan de portas no alvo
+nmap -sV 192.168.1.10
+
+# Tente o login SSH
+ssh professor@192.168.1.10 
+
+# Usando a senha de acesso, você comanda a máquina remotamente
+```
 
 #### 2.B - Hardening
-[A ser preenchido pela aluno responsável]
+> Temos aqui o mesmo código, logo que o acesso via SSH depende da abertura da configuração do SSH e de uma rede plana
+> Aqui, não há barreiras entre computadores, uma máquina de um laboratório vê máquinas de outro laboratório e tudo fica exposto
+> Neste caso, a solução seria separar as redes
+
+```
+# Entra no modo de configuração global
+configure terminal
+
+# 1. Criar a VLAN para os Alunos (o "cômodo" 10)
+vlan 10
+ name ALUNOS-LABS
+ exit
+
+# 2. Criar a VLAN para os Professores (o "cômodo" 20)
+vlan 20
+ name PROFESSORES
+ exit
+
+# 3. Atribuir portas (interfaces) a essas VLANs
+# Vamos dizer que o PC do aluno está na porta 1
+
+interface GigabitEthernet0/1
+ # Define a porta para modo "acesso" (só pertence a uma VLAN)
+ switchport mode access
+ # Atribui a porta à VLAN 10
+ switchport access vlan 10
+ exit
+
+# Agora, digamos que o PC do professor está na porta 15
+interface GigabitEthernet0/15
+ switchport mode access
+ # Atribui a porta à VLAN 20
+ switchport access vlan 20
+ exit
+```
 
 ---
 
 ### Cenário 3: Permissões Excessivas (Abuso de `sudo`)
-* **Descrição:** [A ser preenchido pela aluno responsável]
+* **Descrição:** Com fácil acesso a maquina, senha simples e compartilhada, o atacante se torna um Deus na máquina
 
 #### 3.A - Ataque
-[A ser preenchido pela aluno responsável]
+
+```
+
+```
 
 #### 3.B - Hardening
-[A ser preenchido pela aluno responsável]
 
 ---
 
