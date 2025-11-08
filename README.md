@@ -159,11 +159,15 @@ interface GigabitEthernet0/15
 #### 3.A - Ataque
 
 ```
-
+# Desligando a máquina
+sudo shutdown -h now
 ```
 
 #### 3.B - Hardening
-
+> Aqui demonstramos apenas como desligar a máquina, mas o limite é a criatividade do atacante.
+> Dados podem ser roubados, acessos realizados, tudo pode acontecer.
+> A solução então é que o super usuário seja permitido apenas pelo pessoal altorizado.
+> Os únicos que devem conter o acesso ao super usuário são os funcionários do departamento de TI.
 ---
 
 ### Cenário 4: Falta de Rastreabilidade (Contas Compartilhadas)
