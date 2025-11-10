@@ -140,46 +140,58 @@ sudo shutdown -h now
 > Os únicos que devem conter o acesso ao super usuário são os funcionários do departamento de TI.
 ---
 
+
 ### Cenário 4: Falta de Rastreabilidade (Contas Compartilhadas)
-* **Descrição:** O uso de contas genéricas (`lab_admin`) impossibilita a auditoria e a resposta a incidentes.
+
+  * **Descrição:** O uso de contas genéricas (`lab_admin`) impossibilita a auditoria e a resposta a incidentes.
 
 #### 4.A - Ataque
+
 Na **VM Atacante**, use a credencial compartilhada para acessar e causar dano:
 
+```bash
 # Atacante usa a conta compartilhada
 $ ssh lab_admin@192.168.1.10
 (Senha: "admin123") # Senha definida no script de setup
 
-# Ação maliciosa
-(lab_admin)$ sudo rm /var/log/importante.log
+# Ação maliciosa (ex: apagar logs)
+(lab_admin)$ sudo rm /var/log/auth.log
+```
 
-Na **VM Vítima**, o log de forense é inútil para identificar a pessoa:
+Na **VM Vítima**, o log de forense é inútil para identificar a *pessoa*:
 
+```bash
 # Log mostra 'lab_admin', mas não quem (Paulo, Sara, etc.)
-$ grep "sshd" /var/log/auth.log | tail -n 2
+$ journalctl -u sshd -n 5
 # SAÍDA: ... Accepted password for lab_admin from 192.168.1.20 ...
-
+```
 
 #### 4.B - Hardening
-Na **VM Vítima** bloqueie contas genéricas e force o uso de contas nominais (conforme PUA):
 
+Na **VM Vítima**, bloqueie contas genéricas e force o uso de contas nominais (conforme PUA):
+
+```bash
 # 1. Bloquear (lock) a conta compartilhada
 $ sudo passwd -l lab_admin
 
 # 2. (Opcional) Criar contas nominais
 $ sudo adduser paulo
 $ sudo adduser sara
+```
 
--- Validação: Tente logar da VM Atacante como lab_admin. O acesso será negado (Permission denied). Qualquer ação futura será registrada no log com um nome de usuário individual.
+**Validação:** Tente logar da **VM Atacante** como `lab_admin`. O acesso será negado (`Permission denied`). Qualquer ação futura será registrada no log com um nome de usuário individual.
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----
 
 ### Cenário 5: Pontos de Rede Expostos
-* **Descrição:** Um ponto de rede físico ativo permite que um atacante conecte seu dispositivo e mapeie a rede interna (vulnerabilidade agravada pela falta de segmentação).
+
+  * **Descrição:** Um ponto de rede físico ativo permite que um atacante conecte seu dispositivo e mapeie a rede interna (vulnerabilidade agravada pela falta de segmentação).
 
 #### 5.A - Ataque
+
 Na **VM Atacante** (simulando plugar no ponto de rede), mapeie a rede:
 
+```bash
 # 1. Descobrir hosts vivos na sub-rede (o "ping scan")
 $ nmap -sn 192.168.1.0/24
 # SAÍDA: Host 192.168.1.10 is up.
@@ -187,12 +199,15 @@ $ nmap -sn 192.168.1.0/24
 # 2. Varrer as portas do alvo descoberto
 $ nmap -p 22,80,445 192.168.1.10
 # SAÍDA: PORT 22/tcp open ssh
+```
 
--- Resultado: O atacante descobriu o IP da Vítima e seu serviço SSH.
+**Resultado:** O atacante descobriu o IP da Vítima e seu serviço SSH.
 
-#### 5.B - Hardening 
+#### 5.B - Hardening
+
 Na **VM Vítima**, aplique um firewall de host (UFW) como camada de defesa. A mitigação ideal (802.1X) é no switch, mas o firewall local é crucial.
 
+```bash
 # 1. Instalar o firewall
 $ sudo apt-get install ufw
 
@@ -205,27 +220,34 @@ $ sudo ufw allow from 192.168.100.0/24 to any port 22 # IP de Gerência Fictíci
 
 # 4. Ativar o firewall
 $ sudo ufw enable
+```
 
--- Validação: Rode o nmap novamente da VM Atacante (IP 192.168.1.20). O scan falhará (filtered ou closed), pois o IP do atacante não está na lista de permissão.
+**Validação:** Rode o `nmap` novamente da **VM Atacante** (IP `192.168.1.20`). O scan falhará (`filtered` ou `closed`), pois o IP do atacante não está na lista de permissão.
 
--------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----
 
 ### Cenário 6: Engenharia Social (Pretexting) e 2FA
-* **Descrição:** O atacante usa um pretexto (ex: "Suporte de TI") para roubar a senha da vítima (professor).
-  
+
+  * **Descrição:** O atacante usa um pretexto (ex: "Suporte de TI") para roubar a senha da vítima (professor).
+
 #### 6.A - Ataque
-Encenação: Simule a ligação do "TI" pedindo a senha do professor para "verificar um alerta".
 
-Na **VM Atacante**: Use a senha roubada.
+1.  **Encenação:** Simule a ligação do "TI" pedindo a senha do professor para "verificar um alerta".
+2.  Na **VM Atacante**: Use a senha roubada.
 
+<!-- end list -->
+
+```bash
 $ ssh professor@192.168.1.10
 (Senha: "senha_roubada_123")
 # SAÍDA: Acesso concedido!
-
+```
 
 #### 6.B - Hardening
 
 Na **VM Vítima**, implemente a Autenticação de Dois Fatores (MFA/2FA) no SSH, protegendo contra o vazamento da senha.
+
+```bash
 # 1. Instale o módulo PAM do Google Authenticator
 $ sudo apt-get install libpam-google-authenticator
 
@@ -234,7 +256,7 @@ $ sudo apt-get install libpam-google-authenticator
 $ su - professor
 (Digite a senha do usuário 'professor')
 $ google-authenticator
-### (Responda 'y' (sim) para as perguntas e escaneie o QR Code com seu celular)
+# (Responda 'y' (sim) para as perguntas e escaneie o QR Code com seu celular)
 
 # 3. Configure o SSH para exigir o 2FA (como root/sudo)
 $ sudo nano /etc/ssh/sshd_config
@@ -248,11 +270,22 @@ auth required pam_google_authenticator.so
 
 # 5. Reinicie o serviço
 $ sudo systemctl restart sshd
+```
 
-- Validação: Tente logar da VM Atacante novamente. O sistema pedirá a senha (Password:) E o Verification code:. O atacante não possui o código, e o ataque falha.
-  
--------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Validação:** Tente logar da **VM Atacante** novamente. O sistema pedirá a senha (`Password:`) E o `Verification code:`. O atacante não possui o código, e o ataque falha.
 
-## Parte Teórica
-- Leia o relatório em relatoriofinal.pdf`.
-- Inclui análise de vulnerabilidades, forense (cadeia de custódia, logs), impactos e propostas (PUA, treinamentos).
+-----
+
+## 5\. Parte Teórica (Relatório)
+
+Leia o relatório completo (`relatoriofinal.pdf`) neste repositório para a análise detalhada de vulnerabilidades, forense (cadeia de custódia, logs), impactos e propostas (PUA, treinamentos).
+
+## 6\. Autores
+
+  * **Paulo Prado** - ([@PauloMAPrado](https://www.google.com/search?q=https://github.com/PauloMAPrado))
+  * **Sara Luiz de Farias**
+
+<!-- end list -->
+
+```
+```
