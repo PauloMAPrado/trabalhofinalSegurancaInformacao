@@ -1,4 +1,3 @@
-````markdown
 # Trabalho Final de Segurança da Informação (BSI 6º Período)
 
 ## 1. Descrição do Projeto
