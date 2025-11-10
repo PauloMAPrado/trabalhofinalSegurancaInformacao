@@ -119,37 +119,7 @@ ssh professor@192.168.1.10
 > Aqui, não há barreiras entre computadores, uma máquina de um laboratório vê máquinas de outro laboratório e tudo fica exposto
 > Neste caso, a solução seria separar as redes
 
-```
-# Entra no modo de configuração global
-configure terminal
-
-# 1. Criar a VLAN para os Alunos (o "cômodo" 10)
-vlan 10
- name ALUNOS-LABS
- exit
-
-# 2. Criar a VLAN para os Professores (o "cômodo" 20)
-vlan 20
- name PROFESSORES
- exit
-
-# 3. Atribuir portas (interfaces) a essas VLANs
-# Vamos dizer que o PC do aluno está na porta 1
-
-interface GigabitEthernet0/1
- # Define a porta para modo "acesso" (só pertence a uma VLAN)
- switchport mode access
- # Atribui a porta à VLAN 10
- switchport access vlan 10
- exit
-
-# Agora, digamos que o PC do professor está na porta 15
-interface GigabitEthernet0/15
- switchport mode access
- # Atribui a porta à VLAN 20
- switchport access vlan 20
- exit
-```
+<img width="521" height="321" alt="Diagrama sem nome" src="https://github.com/user-attachments/assets/7bce666c-bd90-4735-ad03-c968f3a3a0ce" />
 
 ---
 
