@@ -1,3 +1,4 @@
+````markdown
 # Trabalho Final de Segurança da Informação (BSI 6º Período)
 
 ## 1. Descrição do Projeto
@@ -21,11 +22,10 @@ Conforme a proposta, o trabalho explora o cenário base (SSH com senha fraca) e 
 ## 2. Diagrama da Arquitetura
 O ambiente prático simula a rede do laboratório de forma isolada, conforme exigido.
 
-[ a ser adicionado ]
+**Diagrama de Rede (Vulnerável vs. Mitigada):**
+<img width="521" height="321" alt="Diagrama de rede segmentada" src="[https://github.com/user-attachments/assets/7bce666c-bd90-4735-ad03-c968f3a3a0ce](https://github.com/user-attachments/assets/7bce666c-bd90-4735-ad03-c968f3a3a0ce)" />
 
-
-**Ferramentas:** VMs (Linux), VirtualBox, Nmap, Python/Bash scripts.  
-**Aviso Importante:** Este projeto é para fins educacionais. Todas as simulações ocorrem em ambientes isolados (VMs sem internet). Não use em sistemas reais para evitar violações legais.
+**Ferramentas:** VMs (Linux), VirtualBox, Nmap, Python/Bash scripts.
 
 ## 3. Instalação e Configuração do Ambiente
 
@@ -52,30 +52,26 @@ O ambiente prático simula a rede do laboratório de forma isolada, conforme exi
     * **VM Atacante:** `192.168.1.20`
     * Teste a conectividade: `ping 192.168.1.10` (a partir do Atacante).
 
-4.  **Configuração do Ambiente Vulnerável (Setup Inicial na VÍTIMA):**
+4.  **Configuração do Ambiente Vulnerável (Setup Inicial):**
+    * **Atenção:** Para instalar as ferramentas (`ssh`, `nmap`, `ufw`, `libpam-google-authenticator`), as VMs precisarão de internet temporariamente. Use o "Método dos 2 Adaptadores" (Adaptador 1 = Rede Interna, Adaptador 2 = NAT) para instalar tudo e, **antes da apresentação**, desabilite o Adaptador 2 (NAT).
     * Clone este repositório na VM Vítima.
     * `git clone https://github.com/PauloMAPrado/trabalhofinalSegurancaInformacao.git`
     * `cd trabalhofinalSegurancaInformacao`
     * `chmod +x scripts/setup_vulneravel.sh`
     * `./scripts/setup_vulneravel.sh`
-    * *Nota: Este script (a ser criado) irá (1) instalar o `openssh-server`, (2) criar contas de usuário vulneráveis (ex: `lab_admin`) e (3) configurar permissões de `sudo` indevidas para simular o ambiente.*
+    * *Nota: Este script irá (1) instalar o `openssh-server`, (2) criar contas de usuário vulneráveis (ex: `lab_admin`, `professor`) e (3) configurar permissões de `sudo` indevidas.*
 
 ## 4. Parte Prática: Demonstração (Ataque e Hardening)
 Esta seção é o núcleo da parte prática, demonstrando cada vulnerabilidade e sua respectiva mitigação.
 
-## Como Usar (Parte Prática)
-### Demonstração de Ataques
+---
 
 ### Cenário 1: Acesso SSH via Senha Fraca (Cenário Base)
 * **Descrição:** O serviço SSH tem acesso fácil quando as maquinas compartilham o mesmo usuário e senha
 
 #### 1.A - Ataque
-
-```
-# Instale o nmap se não tiver
-sudo apt install nmap
-
-# Faça um scan de "descoberta" na sua rede substituindo '192.168.1.0/24' pela sua faixa de IP.
+```bash
+# Scan de descoberta na rede
 nmap -sn 192.168.1.0/24 
 
 # Scan de portas no alvo
@@ -84,25 +80,25 @@ nmap -sV 192.168.1.10
 # Tente o login SSH
 ssh professor@192.168.1.10 
 
-# Usando a senha de acesso, você comanda a máquina remotamente
-```
+# Usando a senha de acesso ('senha_roubada_123'), você comanda a máquina remotamente
+````
 
 #### 1.B - Hardening
+
 > A configuração do usuário SSH precisa ser bem protegida para que não haja problemas na rede.
 > Por padrão, SSH não deveria aceitar a senha do computador como senha pra acesso remoto.
-> Um simples 'PasswordAuthentication no' no arquivo sshd_config do SSH desabilita essa função
+> Um simples 'PasswordAuthentication no' no arquivo sshd\_config do SSH desabilita essa função
 
----
+-----
 
 ### Cenário 2: Redes Não Segmentadas
-* **Descrição:** O salão de festas
+
+  * **Descrição:** O salão de festas
 
 #### 2.A - Ataque
-```
-# Instale o nmap se não tiver
-sudo apt install nmap
 
-# Faça um scan de "descoberta" na sua rede substituindo '192.168.1.0/24' pela sua faixa de IP.
+```bash
+# Scan de descoberta na rede
 nmap -sn 192.168.1.0/24 
 
 # Scan de portas no alvo
@@ -115,31 +111,32 @@ ssh professor@192.168.1.10
 ```
 
 #### 2.B - Hardening
-> Temos aqui o mesmo código, logo que o acesso via SSH depende da abertura da configuração do SSH e de uma rede plana
-> Aqui, não há barreiras entre computadores, uma máquina de um laboratório vê máquinas de outro laboratório e tudo fica exposto
-> Neste caso, a solução seria separar as redes
 
-<img width="521" height="321" alt="Diagrama sem nome" src="https://github.com/user-attachments/assets/7bce666c-bd90-4735-ad03-c968f3a3a0ce" />
+> Temos aqui o mesmo código, logo que o acesso via SSH depende da abertura da configuração do SSH e de uma rede plana.
+> Aqui, não há barreiras entre computadores, uma máquina de um laboratório vê máquinas de outro laboratório e tudo fica exposto.
+> Neste caso, a solução seria separar as redes (VLANs), como mostrado no diagrama da Seção 2.
 
----
+-----
 
 ### Cenário 3: Permissões Excessivas (Abuso de `sudo`)
-* **Descrição:** Com fácil acesso a maquina, senha simples e compartilhada, o atacante se torna um Deus na máquina
+
+  * **Descrição:** Com fácil acesso a maquina, senha simples e compartilhada, o atacante se torna um Deus na máquina
 
 #### 3.A - Ataque
 
-```
+```bash
 # Desligando a máquina
 sudo shutdown -h now
 ```
 
 #### 3.B - Hardening
+
 > Aqui demonstramos apenas como desligar a máquina, mas o limite é a criatividade do atacante.
 > Dados podem ser roubados, acessos realizados, tudo pode acontecer.
 > A solução então é que o super usuário seja permitido apenas pelo pessoal altorizado.
 > Os únicos que devem conter o acesso ao super usuário são os funcionários do departamento de TI.
----
 
+-----
 
 ### Cenário 4: Falta de Rastreabilidade (Contas Compartilhadas)
 
@@ -208,8 +205,8 @@ $ nmap -p 22,80,445 192.168.1.10
 Na **VM Vítima**, aplique um firewall de host (UFW) como camada de defesa. A mitigação ideal (802.1X) é no switch, mas o firewall local é crucial.
 
 ```bash
-# 1. Instalar o firewall
-$ sudo apt-get install ufw
+# 1. Instalar o firewall (feito na Etapa 3)
+# $ sudo apt-get install ufw
 
 # 2. Bloquear tudo por padrão
 $ sudo ufw default deny incoming
@@ -248,8 +245,8 @@ $ ssh professor@192.168.1.10
 Na **VM Vítima**, implemente a Autenticação de Dois Fatores (MFA/2FA) no SSH, protegendo contra o vazamento da senha.
 
 ```bash
-# 1. Instale o módulo PAM do Google Authenticator
-$ sudo apt-get install libpam-google-authenticator
+# 1. Instale o módulo PAM (feito na Etapa 3)
+# $ sudo apt-get install libpam-google-authenticator
 
 # 2. Rode o setup (como o usuário 'professor', NÃO como root)
 # SUBLINHE que deve ser executado pelo usuário que vai usar o 2FA
