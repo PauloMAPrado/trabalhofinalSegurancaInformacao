@@ -264,7 +264,7 @@ $ sudo apt-get install libpam-google-authenticator
 $ su - professor
 (Digite a senha do usuário 'professor')
 $ google-authenticator
-# (Responda 'y' (sim) para as perguntas e escaneie o QR Code com seu celular)
+## (Responda 'y' (sim) para as perguntas e escaneie o QR Code com seu celular)
 
 # 3. Configure o SSH para exigir o 2FA (como root/sudo)
 $ sudo nano /etc/ssh/sshd_config
